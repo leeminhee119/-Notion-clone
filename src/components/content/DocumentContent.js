@@ -1,7 +1,12 @@
-import { request } from "../../api.js";
+import { readDocument } from "../../api.js";
 import Editor from "./Editor.js";
 
-export default function DocumentContent({ $target, initialId, onEditing }) {
+export default function DocumentContent({
+  $target,
+  initialId,
+  onEditing,
+  onChangeTitle,
+}) {
   const $contentSection = document.createElement("section");
   $contentSection.setAttribute("id", "contentSection");
 
@@ -15,12 +20,12 @@ export default function DocumentContent({ $target, initialId, onEditing }) {
 
   const editor = new Editor({
     $target: $contentSection,
-    onEditing: onEditing,
+    onEditing,
+    onChangeTitle,
   });
 
   const fetchData = async () => {
-    const document = await request(`/documents/${this.id}`);
-    console.log(document);
+    const document = await readDocument(this.id);
     editor.setState({
       title: document.title,
       content: document.content,
